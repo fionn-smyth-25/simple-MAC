@@ -6,7 +6,7 @@ module MAC
   parameter K = 2*N + $clog2(COUNT)) //acc width (larger for overflow)
 (
     input clk, rst, en,
-    input[N-1:0] a, b,
+    input signed[N-1:0] a, b,
     output reg valid, //goes high when acc is ready and stable
     output reg[K-1:0] acc //output bit width larger for overflow
 );

@@ -8,7 +8,7 @@ module MAC_tb;
     
     parameter T = 2; //clock period 
     
-    MAC uut (.clk(clk), .rst(test_rst), .en(test_en), .a(i0), .b(i1), .valid(valid), .acc(test_out));
+    MAC #(.N(8), .COUNT(4)) uut (.clk(clk), .rst(test_rst), .en(test_en), .a(i0), .b(i1), .valid(valid), .acc(test_out));
     
     always begin
         clk = 1'b1;
@@ -18,9 +18,9 @@ module MAC_tb;
     end
     
     initial begin
-        test_rst = 1'b1;
-        test_en = 1'b1;
-        i0 = 8'b00000001;
+        test_rst = 1'b1; //reset high for five clock cycles
+        test_en = 1'b1; //enable high
+        i0 = 8'b00000001; 
         i1 = 8'b00000100;
         #(5*T);
         test_rst = 1'b0;
@@ -30,6 +30,15 @@ module MAC_tb;
         #(T);
         i0 = 8'b00000011;
         i1 = 8'b00000110;
+        #(T);
+        test_rst = 1'b1; //reset
+        i0 = 8'b00000001;
+        i1 = 8'b00000001;
+        #(2*T);
+        test_en = 1'b0; //enable low -> show stop MAC even with reset low
+        #(5*T);
+        i0 = 8'b00000011;
+        i1 = 8'b00000011;
     end
        
 endmodule
